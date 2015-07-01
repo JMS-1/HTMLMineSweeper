@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
+    <Content Include="mine.png" />
     <Content Include="Schritt1\index.css" />
     <Content Include="Schritt1\index.html" />
     <Content Include="Schritt1\index.js" />
