@@ -1,21 +1,52 @@
 ﻿"use strict"
 
 function Spielfeld(spielfeld) {
-    var _this = this;
-
     this.breite = parseInt(spielfeld.getAttribute('data-breite'));
     this.hoehe = parseInt(spielfeld.getAttribute('data-hoehe'));
     this.minen = parseInt(spielfeld.getAttribute('data-minen'));
-    this.zuPrüfen = this.breite * this.hoehe - this.minen;
 
+    this.zuPrüfen = this.breite * this.hoehe - this.minen;
     this.zellen = [];
 
+    var felder = this.htmlAufbauen(spielfeld);
+
+    for (var zs = 0; zs < felder.length; zs++) {
+        var feld = felder[zs];
+
+        feld.oncontextmenu = function (ev) {
+            return false;
+        };
+
+        feld.onmouseup = function (ev) {
+            if (ev.button !== 2)
+                return;
+
+            ev.preventDefault();
+            ev.stopPropagation();
+
+            this.zelle.sperreUmschalten();
+        };
+
+        feld.onclick = function () {
+            this.zelle.prüfen();
+        };
+
+        this.zellen.push(new Zelle(this, Math.floor(zs / this.breite), zs % this.breite, feld));
+    }
+
+    this.minenVerstecken();
+
+    this.erstesFeldSuchen();
+}
+
+Spielfeld.prototype.htmlAufbauen = function (spielfeld) {
     var html = '';
+
     for (var zeile = 0; zeile < this.hoehe; zeile++) {
         html += '<div>';
 
         for (var spalte = 0; spalte < this.breite ; spalte++) {
-            html += '<div></div>';
+            html += '<div class="spielfeldZelle"></div>';
         }
 
         html += '</div>';
@@ -23,65 +54,43 @@ function Spielfeld(spielfeld) {
 
     spielfeld.innerHTML = html;
 
-    for (var zeile = 0; zeile < spielfeld.childNodes.length; zeile++)
-        for (var spalte = 0; spalte < spielfeld.childNodes[zeile].childNodes.length; spalte++) {
-            var feld = spielfeld.childNodes[zeile].childNodes[spalte];
+    return spielfeld.querySelectorAll('.spielfeldZelle');
+}
 
-            feld.spieldaten = new Zelle(this, zeile, spalte, feld);
-
-            feld.oncontextmenu = function (ev) {
-                return false;
-            };
-
-            feld.onmouseup = function (ev) {
-                if (ev.button !== 2)
-                    return;
-
-                ev.preventDefault();
-                ev.stopPropagation();
-
-                this.spieldaten.sperreUmschalten();
-            };
-
-            feld.onclick = function () {
-                this.spieldaten.prüfen();
-            };
-
-            this.zellen.push(feld);
-        }
-
-    for (var zuVerstecken = this.minen; zuVerstecken > 0;) {
-        var feld = this.zufallsFeld();
-        if (feld.getAttribute('data-inhalt') !== null)
-            continue;
-
-        zuVerstecken--;
-
-        feld.setAttribute('data-inhalt', 'mine');
-
-        var daten = feld.spieldaten;
-
-        daten.istMine = true;
-
-        for (var zeile = daten.zeile - 1; zeile <= daten.zeile + 1; zeile++)
-            if ((zeile >= 0) && (zeile < this.hoehe))
-                for (var spalte = daten.spalte - 1; spalte <= daten.spalte + 1; spalte++)
-                    if ((spalte >= 0) && (spalte < this.breite))
-                        this.zellen[zeile * this.breite + spalte].spieldaten.minen += 1;
-    }
-
+Spielfeld.prototype.erstesFeldSuchen = function () {
     for (; ;) {
-        var feld = this.zufallsFeld();
-        if (feld.spieldaten.minen > 0)
+        var zelle = this.zufallsZelle();
+        if (this.minenZählen(zelle) > 0)
             continue;
 
-        feld.click();
+        zelle.feld.click();
 
-        break;
+        return;
     }
 }
 
-Spielfeld.prototype.zufallsFeld = function () {
+Spielfeld.prototype.minenVerstecken = function () {
+    for (var zuVerstecken = this.minen; zuVerstecken-- > 0;) {
+        var zelle = this.zufallsZelle();
+        if (zelle.istMine)
+            zuVerstecken++;
+        else
+            zelle.alsMine();
+    }
+}
+
+Spielfeld.prototype.minenZählen = function (zelle) {
+    var minen = 0;
+
+    for (var zeile = Math.max(0, zelle.zeile - 1) ; zeile <= Math.min(zelle.zeile + 1, this.hoehe - 1) ; zeile++)
+        for (var spalte = Math.max(0, zelle.spalte - 1) ; spalte <= Math.min(zelle.spalte + 1, this.breite - 1) ; spalte++)
+            if (this.zellen[zeile * this.breite + spalte].istMine)
+                minen++;
+
+    return minen;
+}
+
+Spielfeld.prototype.zufallsZelle = function () {
     return this.zellen[Math.floor(Math.random() * this.zellen.length)];
 }
 
@@ -103,9 +112,13 @@ Spielfeld.prototype.prüfen = function (zuPrüfen) {
     if (!this.istBeendet())
         return;
 
-    this.zellen.forEach(function (feld) {
-        feld.spieldaten.beenden();
+    this.zellen.forEach(function (zelle) {
+        zelle.beenden();
     });
 
     alert((zuPrüfen == 0) ? 'GEWONNEN' : 'VERLOREN');
+}
+
+Spielfeld.register = function (spielfeld) {
+    new Spielfeld(spielfeld);
 }

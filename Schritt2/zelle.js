@@ -8,9 +8,9 @@ function Zelle(spielfeld, zeile, spalte, feld) {
     this.istGesperrt = false;
     this.istGeprüft = false;
     this.istMine = false;
-    this.minen = 0;
 
     this.feld = feld;
+    feld.zelle = this;
 }
 
 Zelle.prototype.sperreUmschalten = function () {
@@ -21,10 +21,7 @@ Zelle.prototype.sperreUmschalten = function () {
 
     this.istGesperrt = !this.istGesperrt;
 
-    if (this.istGesperrt)
-        this.feld.setAttribute('data-gesperrt', 'ja');
-    else
-        this.feld.removeAttribute('data-gesperrt');
+    this.feld.setAttribute('data-gesperrt', this.istGesperrt ? 'ja' : 'nein');
 }
 
 Zelle.prototype.prüfen = function () {
@@ -37,9 +34,11 @@ Zelle.prototype.prüfen = function () {
 
     this.alsGeprüftMarkieren();
 
-    if (!this.istMine)
-        if (this.minen > 0)
-            this.feld.innerHTML = this.minen;
+    if (!this.istMine) {
+        var minen = this.spielfeld.minenZählen(this);
+        if (minen > 0)
+            this.feld.innerHTML = minen;
+    }
 
     if (this.istMine)
         this.spielfeld.verloren();
@@ -56,4 +55,10 @@ Zelle.prototype.alsGeprüftMarkieren = function () {
     this.istGeprüft = true;
 
     this.feld.setAttribute('data-getestet', 'ja');
+}
+
+Zelle.prototype.alsMine = function () {
+    this.istMine = true;
+
+    this.feld.setAttribute('data-mine', 'ja');
 }

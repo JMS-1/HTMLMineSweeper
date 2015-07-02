@@ -7,27 +7,28 @@
         display: table-row;
     }
 
-        .mineSweeper > div > div {
-            display: table-cell;
-            width: 20px;
-            height: 20px;
-            border: 1px solid black;
-            text-align: center;
-            vertical-align: middle;
-        }
 
-            .mineSweeper > div > div[data-inhalt="mine"][data-getestet] {
-                background-image: url(../mine.png);
-                background-position: center center;
-                background-size: 100%;
-                background-repeat: no-repeat;
-                background-color: red;
-            }
+.spielfeldZelle {
+    display: table-cell;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+}
 
-            .mineSweeper > div > div:not([data-getestet]) {
-                background-color: greenyellow;
-            }
+    .spielfeldZelle[data-mine][data-getestet] {
+        background-image: url(../mine.png);
+        background-position: center center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-color: red;
+    }
 
-            .mineSweeper > div > div[data-gesperrt] {
-                background-color: red;
-            }
+    .spielfeldZelle:not([data-getestet]) {
+        background-color: greenyellow;
+    }
+
+    .spielfeldZelle[data-gesperrt="ja"] {
+        background-color: red;
+    }
