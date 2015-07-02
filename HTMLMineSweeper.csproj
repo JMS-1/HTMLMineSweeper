@@ -73,6 +73,8 @@
     <Content Include="Schritt1\index.css" />
     <Content Include="Schritt1\index.html" />
     <Content Include="Schritt1\index.js" />
+    <Content Include="Schritt2\spielfeld.js" />
+    <Content Include="Schritt2\zelle.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
