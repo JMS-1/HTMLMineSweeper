@@ -16,7 +16,7 @@
             vertical-align: middle;
         }
 
-            .mineSweeper > div > div[data-inhalt="mine"] {
+            .mineSweeper > div > div[data-inhalt="mine"][data-getestet] {
                 background-image: url(../mine.png);
                 background-position: center center;
                 background-size: 100%;
@@ -26,4 +26,8 @@
 
             .mineSweeper > div > div:not([data-getestet]) {
                 background-color: greenyellow;
+            }
+
+            .mineSweeper > div > div[data-gesperrt] {
+                background-color: red;
             }

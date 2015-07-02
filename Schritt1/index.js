@@ -24,6 +24,7 @@ function spielfeldVorbereiten(spielfeld) {
     spielfeld.innerHTML = html;
 
     var felder = [];
+    var vorbei = false;
 
     for (var zeile = 0; zeile < spielfeld.childNodes.length; zeile++)
         for (var spalte = 0; spalte < spielfeld.childNodes[zeile].childNodes.length; spalte++) {
@@ -32,13 +33,51 @@ function spielfeldVorbereiten(spielfeld) {
             feld.spieldaten = {
                 spalte: spalte,
                 zeile: zeile,
+                mine: false,
                 minen: 0,
             };
 
+            feld.oncontextmenu = function (ev) {
+                return false;
+            };
+
+            feld.onmouseup = function (ev) {
+                if (ev.button !== 2)
+                    return;
+
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                if (vorbei)
+                    return;
+
+                if (this.getAttribute('data-getestet') !== null)
+                    return;
+
+                this.setAttribute('data-gesperrt', 'ja');
+            };
+
             feld.onclick = function () {
-                this.innerHTML = this.spieldaten.minen;
+                if (vorbei)
+                    return;
+
+                if (this.getAttribute('data-gesperrt') !== null)
+                    return;
+
                 this.setAttribute('data-getestet', 'ja');
-            }
+
+                var daten = this.spieldaten;
+                if (!daten.mine)
+                    this.innerHTML = daten.minen;
+                else {
+                    vorbei = true;
+
+                    felder.forEach(function (feld) {
+                        if (feld.spieldaten.mine)
+                            feld.setAttribute('data-getestet', 'ja');
+                    });
+                }
+            };
 
             felder.push(feld);
         }
@@ -54,11 +93,23 @@ function spielfeldVorbereiten(spielfeld) {
 
         var daten = feld.spieldaten;
 
+        daten.mine = true;
+
         for (var zeile = daten.zeile - 1; zeile <= daten.zeile + 1; zeile++)
             if ((zeile >= 0) && (zeile < hoehe))
                 for (var spalte = daten.spalte - 1; spalte <= daten.spalte + 1; spalte++)
                     if ((spalte >= 0) && (spalte < breite))
                         felder[zeile * breite + spalte].spieldaten.minen += 1;
+    }
+
+    for (; ;) {
+        var feld = felder[Math.floor(Math.random() * felder.length)];
+        if (feld.spieldaten.mine)
+            continue;
+
+        feld.click();
+
+        break;
     }
 }
 
