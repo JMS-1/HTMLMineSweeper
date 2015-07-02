@@ -1,0 +1,34 @@
+﻿.mineSweeper {
+    display: table;
+    border-collapse: collapse;
+}
+
+    .mineSweeper > div {
+        display: table-row;
+    }
+
+
+.spielfeldZelle {
+    display: table-cell;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .spielfeldZelle[data-mine][data-getestet] {
+        background-image: url(../mine.png);
+        background-position: center center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-color: red;
+    }
+
+    .spielfeldZelle:not([data-getestet]) {
+        background-color: greenyellow;
+    }
+
+    .spielfeldZelle[data-gesperrt="ja"] {
+        background-color: red;
+    }
