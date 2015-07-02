@@ -24,7 +24,7 @@ function spielfeldVorbereiten(spielfeld) {
     spielfeld.innerHTML = html;
 
     var felder = [];
-    var vorbei = false;
+    var offen = breite * hoehe - minen;
 
     for (var zeile = 0; zeile < spielfeld.childNodes.length; zeile++)
         for (var spalte = 0; spalte < spielfeld.childNodes[zeile].childNodes.length; spalte++) {
@@ -48,35 +48,46 @@ function spielfeldVorbereiten(spielfeld) {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                if (vorbei)
+                if (offen < 1)
                     return;
-
                 if (this.getAttribute('data-getestet') !== null)
                     return;
 
-                this.setAttribute('data-gesperrt', 'ja');
+                if (this.getAttribute('data-gesperrt') !== null)
+                    this.removeAttribute('data-gesperrt');
+                else
+                    this.setAttribute('data-gesperrt', 'ja');
             };
 
             feld.onclick = function () {
-                if (vorbei)
+                if (offen < 1)
                     return;
-
+                if (this.getAttribute('data-getestet') !== null)
+                    return;
                 if (this.getAttribute('data-gesperrt') !== null)
                     return;
 
                 this.setAttribute('data-getestet', 'ja');
 
                 var daten = this.spieldaten;
-                if (!daten.mine)
-                    this.innerHTML = daten.minen;
+                if (daten.mine)
+                    offen = -1;
                 else {
-                    vorbei = true;
+                    offen--;
 
-                    felder.forEach(function (feld) {
-                        if (feld.spieldaten.mine)
-                            feld.setAttribute('data-getestet', 'ja');
-                    });
+                    if (daten.minen > 0)
+                        this.innerHTML = daten.minen;
                 }
+
+                if (offen > 0)
+                    return;
+
+                felder.forEach(function (feld) {
+                    if (feld.spieldaten.mine)
+                        feld.setAttribute('data-getestet', 'ja');
+                });
+
+                alert((offen == 0) ? 'GEWONNEN' : 'VERLOREN');
             };
 
             felder.push(feld);
