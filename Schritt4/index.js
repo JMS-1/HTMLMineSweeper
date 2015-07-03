@@ -24,4 +24,13 @@ function starten() {
 
     // Auch hier das Modell mit der Anzeige verbinden
     ControllerZustand.connect(model, zeit);
+
+    // Umschalter für das automatische Erweitern leerer Zellen
+    var auto = document.getElementById('autoErweitern');
+
+    // Modell mit der Anzeige verbinden
+    ControllerAutoErweiterung.connect(model, auto);
+
+    // Und ein erstes Feld ohne Mine und auch ohne Minen im direkten Umfeld als Starthilfe setzen
+    model.freiesFeldSuchen();
 }

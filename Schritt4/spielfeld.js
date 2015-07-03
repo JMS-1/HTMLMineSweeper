@@ -13,6 +13,7 @@
         zuPrüfen: number        die Anzahl der Zellen ohne Minen, die noch nicht aufgedeckt wurden
         start: Date             der Zeitpunkt, an dem das Spiel gestartet wurde       
         ergebnis: number        die Spielzeit bis zum Ende des Spiels in Sekunden
+        autoErweitern: boolean  gesetzt, wenn nach dem Prüfen von Zellen ohne Umfeld die Umfeldzellen auch geprüft werden sollen
 
   Änderungen zum Spielverlauf werden über Benachrichtigungen mitgeteilt:
         fertig: (gewonnen: boolean) => void        wird aufgerufen, wenn das Spiel beendet ist - entweder, weil alle Zellen ohne Minen aufgedeckt sind oder versucht wurde, eine Zelle mit Mine aufzudecken
@@ -28,6 +29,7 @@ function Spielfeld(breite, hoehe, minen) {
 // Baut den Spielstand völlig neu auf.
 Spielfeld.prototype.initialisieren = function () {
     this.zuPrüfen = this.breite * this.hoehe - this.minen;
+    this.autoErweitern = false;
     this.ergebnis = undefined;
     this.fertig = null;
     this.zellen = [];
@@ -46,6 +48,14 @@ Spielfeld.prototype.initialisieren = function () {
             zelle.istMine = true;
     }
 
+    // Nun noch das Umfeld aller Zellen prüfen
+    this.zellen.forEach(function (zelle) {
+        for (var zeile = Math.max(0, zelle.zeile - 1) ; zeile <= Math.min(zelle.zeile + 1, this.hoehe - 1) ; zeile++)
+            for (var spalte = Math.max(0, zelle.spalte - 1) ; spalte <= Math.min(zelle.spalte + 1, this.breite - 1) ; spalte++)
+                if (this.zellen[zeile * this.breite + spalte].istMine)
+                    zelle.minen += 1;
+    }, this);
+
     this.start = new Date();
 }
 
@@ -53,7 +63,7 @@ Spielfeld.prototype.initialisieren = function () {
 Spielfeld.prototype.freiesFeldSuchen = function () {
     for (; ;) {
         var zelle = this.zufallsZelle();
-        if (this.minenZählen(zelle) > 0)
+        if (zelle.minen > 0)
             continue;
 
         zelle.prüfen();
@@ -62,31 +72,19 @@ Spielfeld.prototype.freiesFeldSuchen = function () {
     }
 }
 
-// Ermittelt zu einer Zelle die Minen im direkten Umfeld.
-Spielfeld.prototype.minenZählen = function (zelle) {
-    var minen = 0;
-
-    for (var zeile = Math.max(0, zelle.zeile - 1) ; zeile <= Math.min(zelle.zeile + 1, this.hoehe - 1) ; zeile++)
-        for (var spalte = Math.max(0, zelle.spalte - 1) ; spalte <= Math.min(zelle.spalte + 1, this.breite - 1) ; spalte++)
-            if (this.zellen[zeile * this.breite + spalte].istMine)
-                minen++;
-
-    return minen;
-}
-
 // Ermittelt eine zufällige Zelle.
 Spielfeld.prototype.zufallsZelle = function () {
     return this.zellen[Math.floor(Math.random() * this.zellen.length)];
 }
 
 // Beendet das Spiel als verloren.
-Spielfeld.prototype.verloren = function () {
-    this.prüfen(-1);
+Spielfeld.prototype.verloren = function (zelle) {
+    this.prüfen(-1, zelle);
 }
 
 // Vermerkt, dass eine weiter Zelle ohne Mine aufgedeckt wurde.
-Spielfeld.prototype.erfolgreichGeprüft = function () {
-    this.prüfen(this.zuPrüfen - 1);
+Spielfeld.prototype.erfolgreichGeprüft = function (zelle) {
+    this.prüfen(this.zuPrüfen - 1, zelle);
 }
 
 // Meldet die Spielzeit in Sekunden.
@@ -97,13 +95,20 @@ Spielfeld.prototype.spielzeit = function () {
 }
 
 // Aktualisiert den Spielstand.
-Spielfeld.prototype.prüfen = function (zuPrüfen) {
+Spielfeld.prototype.prüfen = function (zuPrüfen, zelle) {
     // Spielstand übernehmen
     this.zuPrüfen = zuPrüfen;
 
     // Es gibt noch Zellen, die aufgedeckt werden können
-    if (this.zuPrüfen > 0)
+    if (this.zuPrüfen > 0) {
+        if (this.autoErweitern)
+            if (zelle.minen < 1)
+                for (var zeile = Math.max(0, zelle.zeile - 1) ; zeile <= Math.min(zelle.zeile + 1, this.hoehe - 1) ; zeile++)
+                    for (var spalte = Math.max(0, zelle.spalte - 1) ; spalte <= Math.min(zelle.spalte + 1, this.breite - 1) ; spalte++)
+                        this.zellen[zeile * this.breite + spalte].prüfen();
+
         return;
+    }
 
     // Spielzeit merken
     this.ergebnis = this.spielzeit();

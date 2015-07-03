@@ -4,11 +4,8 @@ var ControllerZelle = {
     // Verbindet das Spielmodell einer Zelle mit der zugehörigen Anzeige.
     connect: function (model, view) {
 
-        // Anzahl der Minen in der unmittelbaren Umgebung der Zelle ermitteln
-        var minen = model.spielfeld.minenZählen(model);
-
-        // Diese Anzahl in die Anzeige übernehmen
-        view.innerHTML = '<div>' + ((minen > 0) ? minen : '') + '</div>';
+        // Anzahl der Minen in der unmittelbaren Umgebung der Zelle in die Anzeige übernehmen
+        view.innerHTML = '<div>' + ((model.minen > 0) ? model.minen : '') + '</div>';
 
         // Anzeige für Zellen mit Minen vorbereiten
         if (model.istMine)

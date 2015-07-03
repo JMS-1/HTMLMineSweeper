@@ -29,8 +29,5 @@ var ControllerSpielfeld = {
         model.fertig = function (gewonnen) {
             alert(gewonnen ? "GEWONNEN" : "VERLOREN");
         };
-
-        // Und ein erstes Feld ohne Mine und auch ohne Minen im direkten Umfeld als Starthilfe setzen
-        model.freiesFeldSuchen();
     },
 };

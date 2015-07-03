@@ -12,6 +12,7 @@
         istGesperrt: boolean                gesetzt, wenn die Zelle für Prüfungen gesperrt wurde, weil der Verdacht einer Mine besteht
         istGeprüft: boolean                 gesetzt, sobald die Zelle durch Aufdecken geprüft wurde
         istBeendet: boolean                 gesetzt, wenn das Spiel als beendet gemeldet wurde
+        minen: number                       die Anzahl der Minen im direkten Umfeld, einschließlich der Zelle selbst
 
   Änderungen am Spielzustand werden durch folgende Methoden gemeldet:
         nachPrüfung: () => void             wird aufgerufen, wenn istGeprüft erstmalig gesetzt wird
@@ -30,6 +31,7 @@ Zelle.prototype.initialisieren = function () {
     this.istGeprüft = false;
     this.istBeendet = false;
     this.istMine = false;
+    this.minen = 0;
 
     this.nachPrüfung = null;
 }
@@ -60,9 +62,9 @@ Zelle.prototype.prüfen = function () {
 
     // Je nach Inhalt der Zelle an das Spielfeld melden
     if (this.istMine)
-        this.spielfeld.verloren();
+        this.spielfeld.verloren(this);
     else
-        this.spielfeld.erfolgreichGeprüft();
+        this.spielfeld.erfolgreichGeprüft(this);
 }
 
 // Beendet das Spiel.
