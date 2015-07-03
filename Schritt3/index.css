@@ -17,6 +17,10 @@
     vertical-align: middle;
 }
 
+    .spielfeldZelle[data-mine] > div {
+        display: none;
+    }
+
     .spielfeldZelle[data-mine][data-getestet] {
         background-image: url(../mine.png);
         background-position: center center;
@@ -28,6 +32,10 @@
     .spielfeldZelle:not([data-getestet]) {
         background-color: greenyellow;
     }
+
+        .spielfeldZelle:not([data-getestet]) > div {
+            display: none;
+        }
 
     .spielfeldZelle[data-gesperrt="ja"] {
         background-color: red;

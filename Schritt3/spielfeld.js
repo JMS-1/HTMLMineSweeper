@@ -1,47 +1,33 @@
-﻿"use strict"
+﻿"use strict";
 
-function Spielfeld(spielfeld) {
-    this.breite = parseInt(spielfeld.getAttribute('data-breite'));
-    this.hoehe = parseInt(spielfeld.getAttribute('data-hoehe'));
-    this.minen = parseInt(spielfeld.getAttribute('data-minen'));
+function Spielfeld(breite, hoehe, minen) {
+    this.breite = breite;
+    this.hoehe = hoehe;
+    this.minen = minen;
 
+    this.initialisieren();
+}
+
+Spielfeld.prototype.initialisieren = function () {
     this.zuPrüfen = this.breite * this.hoehe - this.minen;
     this.zellen = [];
 
-    var felder = this.htmlAufbauen(spielfeld);
+    for (var zeile = 0; zeile < this.hoehe; zeile++)
+        for (var spalte = 0; spalte < this.breite; spalte++)
+            this.zellen.push(new Zelle(this, zeile, spalte));
 
-    for (var zs = 0; zs < felder.length; zs++) {
-        var zelle = new Zelle(this, Math.floor(zs / this.breite), zs % this.breite);
-
-        this.zellen.push(zelle);
-
-        ControllerZelle.connect(zelle, felder[zs]);
+    for (var zuVerstecken = this.minen; zuVerstecken-- > 0;) {
+        var zelle = this.zufallsZelle();
+        if (zelle.istMine)
+            zuVerstecken++;
+        else
+            zelle.istMine = true;
     }
 
-    this.minenVerstecken();
-
-    this.erstesFeldSuchen();
+    this.fertig = null;
 }
 
-Spielfeld.prototype.htmlAufbauen = function (spielfeld) {
-    var html = '';
-
-    for (var zeile = 0; zeile < this.hoehe; zeile++) {
-        html += '<div>';
-
-        for (var spalte = 0; spalte < this.breite ; spalte++) {
-            html += '<div class="spielfeldZelle"></div>';
-        }
-
-        html += '</div>';
-    }
-
-    spielfeld.innerHTML = html;
-
-    return spielfeld.querySelectorAll('.spielfeldZelle');
-}
-
-Spielfeld.prototype.erstesFeldSuchen = function () {
+Spielfeld.prototype.freiesFeldSuchen = function () {
     for (; ;) {
         var zelle = this.zufallsZelle();
         if (this.minenZählen(zelle) > 0)
@@ -50,16 +36,6 @@ Spielfeld.prototype.erstesFeldSuchen = function () {
         zelle.prüfen();
 
         return;
-    }
-}
-
-Spielfeld.prototype.minenVerstecken = function () {
-    for (var zuVerstecken = this.minen; zuVerstecken-- > 0;) {
-        var zelle = this.zufallsZelle();
-        if (zelle.istMine)
-            zuVerstecken++;
-        else
-            zelle.versteckeMine();
     }
 }
 
@@ -100,9 +76,6 @@ Spielfeld.prototype.prüfen = function (zuPrüfen) {
         zelle.beenden();
     });
 
-    alert((zuPrüfen == 0) ? 'GEWONNEN' : 'VERLOREN');
-}
-
-Spielfeld.register = function (spielfeld) {
-    new Spielfeld(spielfeld);
+    if (this.fertig !== null)
+        this.fertig(zuPrüfen == 0);
 }

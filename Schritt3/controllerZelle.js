@@ -1,5 +1,14 @@
-﻿var ControllerZelle = {
+﻿"use strict";
+
+var ControllerZelle = {
     connect: function (model, view) {
+
+        var minen = model.spielfeld.minenZählen(model);
+
+        view.innerHTML = '<div>' + ((minen > 0) ? minen : '') + '</div>';
+
+        if (model.istMine)
+            view.setAttribute('data-mine', 'ja');
 
         view.oncontextmenu = function (ev) {
             return false;
@@ -27,14 +36,5 @@
         model.nachPrüfung = function () {
             view.setAttribute('data-getestet', 'ja');
         };
-
-        model.wirdMine = function () {
-            view.setAttribute('data-mine', 'ja');
-        }
-
-        model.minenAnzeigen = function (minen) {
-            if (minen > 0)
-                view.innerHTML = minen;
-        }
     },
 };
