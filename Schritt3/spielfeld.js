@@ -11,27 +11,11 @@ function Spielfeld(spielfeld) {
     var felder = this.htmlAufbauen(spielfeld);
 
     for (var zs = 0; zs < felder.length; zs++) {
-        var feld = felder[zs];
+        var zelle = new Zelle(this, Math.floor(zs / this.breite), zs % this.breite);
 
-        feld.oncontextmenu = function (ev) {
-            return false;
-        };
+        this.zellen.push(zelle);
 
-        feld.onmouseup = function (ev) {
-            if (ev.button !== 2)
-                return;
-
-            ev.preventDefault();
-            ev.stopPropagation();
-
-            this.zelle.sperreUmschalten();
-        };
-
-        feld.onclick = function () {
-            this.zelle.prüfen();
-        };
-
-        this.zellen.push(new Zelle(this, Math.floor(zs / this.breite), zs % this.breite, feld));
+        ControllerZelle.connect(zelle, felder[zs]);
     }
 
     this.minenVerstecken();
@@ -63,7 +47,7 @@ Spielfeld.prototype.erstesFeldSuchen = function () {
         if (this.minenZählen(zelle) > 0)
             continue;
 
-        zelle.feld.click();
+        zelle.prüfen();
 
         return;
     }
@@ -75,7 +59,7 @@ Spielfeld.prototype.minenVerstecken = function () {
         if (zelle.istMine)
             zuVerstecken++;
         else
-            zelle.alsMine();
+            zelle.versteckeMine();
     }
 }
 

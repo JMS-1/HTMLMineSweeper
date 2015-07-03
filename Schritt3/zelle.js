@@ -1,31 +1,31 @@
 ﻿"use strict"
 
-function Zelle(spielfeld, zeile, spalte, feld) {
+function Zelle(spielfeld, zeile, spalte) {
     this.spielfeld = spielfeld;
     this.spalte = spalte;
     this.zeile = zeile;
 
     this.istGesperrt = false;
     this.istGeprüft = false;
+    this.istBeendet = false;
     this.istMine = false;
 
-    this.feld = feld;
-    feld.zelle = this;
+    this.minenAnzeigen = null;
+    this.nachPrüfung = null;
+    this.wirdMine = null;
 }
 
 Zelle.prototype.sperreUmschalten = function () {
-    if (this.spielfeld.istBeendet())
+    if (this.istBeendet)
         return;
     if (this.istGeprüft)
         return;
 
     this.istGesperrt = !this.istGesperrt;
-
-    this.feld.setAttribute('data-gesperrt', this.istGesperrt ? 'ja' : 'nein');
 }
 
 Zelle.prototype.prüfen = function () {
-    if (this.spielfeld.istBeendet())
+    if (this.istBeendet)
         return;
     if (this.istGeprüft)
         return;
@@ -34,11 +34,9 @@ Zelle.prototype.prüfen = function () {
 
     this.alsGeprüftMarkieren();
 
-    if (!this.istMine) {
-        var minen = this.spielfeld.minenZählen(this);
-        if (minen > 0)
-            this.feld.innerHTML = minen;
-    }
+    if (!this.istMine)
+        if (this.minenAnzeigen !== null)
+            this.minenAnzeigen(this.spielfeld.minenZählen(this));
 
     if (this.istMine)
         this.spielfeld.verloren();
@@ -47,18 +45,28 @@ Zelle.prototype.prüfen = function () {
 }
 
 Zelle.prototype.beenden = function () {
+    this.istBeendet = true;
+
     if (this.istMine)
         this.alsGeprüftMarkieren();
 }
 
 Zelle.prototype.alsGeprüftMarkieren = function () {
+    if (this.istGeprüft)
+        return;
+
     this.istGeprüft = true;
 
-    this.feld.setAttribute('data-getestet', 'ja');
+    if (this.nachPrüfung !== null)
+        this.nachPrüfung();
 }
 
-Zelle.prototype.alsMine = function () {
+Zelle.prototype.versteckeMine = function () {
+    if (this.istMine)
+        return;
+
     this.istMine = true;
 
-    this.feld.setAttribute('data-mine', 'ja');
+    if (this.wirdMine !== null)
+        this.wirdMine();
 }

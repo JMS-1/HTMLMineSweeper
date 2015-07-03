@@ -67,6 +67,8 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="mine.png" />
+    <Content Include="Schritt3\controllerSpielfeld.js" />
+    <Content Include="Schritt3\controllerZelle.js" />
     <Content Include="Schritt3\index.css" />
     <Content Include="Schritt3\index.html" />
     <Content Include="Schritt3\index.js" />
