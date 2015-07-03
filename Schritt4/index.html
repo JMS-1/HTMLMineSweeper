@@ -6,6 +6,7 @@
 
     <script src="controllerZelle.js"></script>
     <script src="controllerSpielfeld.js"></script>
+    <script src="controllerZustand.js"></script>
 
     <script src="zelle.js"></script>
     <script src="spielfeld.js"></script>
@@ -15,12 +16,26 @@
 <body onload="starten()">
     <h1>Mine Sweeper - MVC mit erweiterten Funktionen</h1>
 
-    <div class="mineSweeper" data-breite="10" data-hoehe="10" data-minen="10">
-    </div>
+    <table class="optionen">
+        <tbody>
+            <tr>
+                <td>Größe des Spielfelds:</td>
+                <td>
+                    <select id="auswahlGröße">
+                        <option value="10x10x10" selected>10 Zeilen, 10 Spalten, 10 Minen</option>
+                        <option value="20x40x100">20 Zeilen, 40 Spalten, 100 Minen</option>
+                    </select>
+                    <input type="button" value="Neu aufbauen" onclick="starten()" />
+                </td>
+            </tr>
+            <tr>
+                <td>Verstrichene Zeit (Sekunden):</td>
+                <td><span id="zeit"></span></td>
+            </tr>
+        </tbody>
+    </table>
 
-    <br />
-
-    <div class="mineSweeper" data-breite="25" data-hoehe="25" data-minen="100">
+    <div id="mineSweeper" class="mineSweeper">
     </div>
 
 </body>

@@ -41,3 +41,7 @@
     .spielfeldZelle[data-gesperrt="ja"] {
         background-color: red;
     }
+
+.optionen {
+    margin: 10px;
+}

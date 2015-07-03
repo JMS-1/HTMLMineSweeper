@@ -11,6 +11,8 @@
   Weitere Informationen beschreiben den Zustand des Spiels:
         zellen: Zelle[]         alles Zellen, die zum Spiel gehören, angeordnet von rechts nach links und dann von oben nach unten
         zuPrüfen: number        die Anzahl der Zellen ohne Minen, die noch nicht aufgedeckt wurden
+        start: Date             der Zeitpunkt, an dem das Spiel gestartet wurde       
+        ergebnis: number        die Spielzeit bis zum Ende des Spiels in Sekunden
 
   Änderungen zum Spielverlauf werden über Benachrichtigungen mitgeteilt:
         fertig: (gewonnen: boolean) => void        wird aufgerufen, wenn das Spiel beendet ist - entweder, weil alle Zellen ohne Minen aufgedeckt sind oder versucht wurde, eine Zelle mit Mine aufzudecken
@@ -26,6 +28,8 @@ function Spielfeld(breite, hoehe, minen) {
 // Baut den Spielstand völlig neu auf.
 Spielfeld.prototype.initialisieren = function () {
     this.zuPrüfen = this.breite * this.hoehe - this.minen;
+    this.ergebnis = undefined;
+    this.fertig = null;
     this.zellen = [];
 
     // Modelle für die Zellen erstellen und merken
@@ -42,7 +46,7 @@ Spielfeld.prototype.initialisieren = function () {
             zelle.istMine = true;
     }
 
-    this.fertig = null;
+    this.start = new Date();
 }
 
 // Sucht eine Zelle ohne Mine und ohne Minen im direkten Umfeld und führt die Prüfung darauf durch.
@@ -85,6 +89,13 @@ Spielfeld.prototype.erfolgreichGeprüft = function () {
     this.prüfen(this.zuPrüfen - 1);
 }
 
+// Meldet die Spielzeit in Sekunden.
+Spielfeld.prototype.spielzeit = function () {
+    var jetzt = new Date();
+
+    return (jetzt.getTime() - this.start.getTime()) / 1000.0;
+}
+
 // Aktualisiert den Spielstand.
 Spielfeld.prototype.prüfen = function (zuPrüfen) {
     // Spielstand übernehmen
@@ -93,6 +104,9 @@ Spielfeld.prototype.prüfen = function (zuPrüfen) {
     // Es gibt noch Zellen, die aufgedeckt werden können
     if (this.zuPrüfen > 0)
         return;
+
+    // Spielzeit merken
+    this.ergebnis = this.spielzeit();
 
     // Alle Zellen als beendet markieren und so weitere Aktionen des Anwenders unterbinden
     this.zellen.forEach(function (zelle) {

@@ -1,18 +1,27 @@
 ﻿"use strict";
 
 function starten() {
-    // So markieren wir in der Anzeige alle unsere Spielfelder
-    var spielfelder = document.querySelectorAll('.mineSweeper');
+    // Ab jetzt gibt es nur noch ein Spielfeld
+    var spielfeld = document.getElementById('mineSweeper');
 
-    for (var i = 0; i < spielfelder.length; i++) {
-        // Über die Attribute in der Anzeige werden die Eckdaten des Spielfelds ermittelt
-        var spielfeld = spielfelder[i];
+    // Größe ermitteln
+    var größe = document.getElementById('auswahlGröße');
+    var split = größe.options[größe.selectedIndex].value.split('x');
 
-        var breite = parseInt(spielfeld.getAttribute('data-breite'));
-        var hoehe = parseInt(spielfeld.getAttribute('data-hoehe'));
-        var minen = parseInt(spielfeld.getAttribute('data-minen'));
+    // Über die Attribute in der Anzeige werden die Eckdaten des Spielfelds ermittelt
+    var hoehe = parseInt(split[0]);
+    var breite = parseInt(split[1]);
+    var minen = parseInt(split[2]);
 
-        // Ein neues Modell eines Spielfelds wird schließlich mit der Anzeige verbunden
-        ControllerSpielfeld.connect(new Spielfeld(breite, hoehe, minen), spielfeld);
-    }
+    // Modell des Spielfelds anlegen
+    var model = new Spielfeld(breite, hoehe, minen);
+
+    // Das Modell mit der Anzeige verbinden
+    ControllerSpielfeld.connect(model, spielfeld);
+
+    // Anzeige des Spielzustands
+    var zeit = document.getElementById('zeit');
+
+    // Auch hier das Modell mit der Anzeige verbinden
+    ControllerZustand.connect(model, zeit);
 }

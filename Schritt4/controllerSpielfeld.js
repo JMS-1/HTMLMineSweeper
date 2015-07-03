@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 var ControllerSpielfeld = {
-    // Verbindet das Modell eines Spielfeldcs mit der Anzeige desselben.
+    // Verbindet das Modell eines Spielfelds mit der Anzeige desselben.
     connect: function (model, view) {
         // Wir bauen das Spielfeld als DIV Tabelle auf
         var html = '';
