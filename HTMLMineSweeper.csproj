@@ -67,6 +67,17 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="mine.png" />
+    <Content Include="Schritt5\controllerErweitern.js" />
+    <Content Include="Schritt5\controllerScore.js" />
+    <Content Include="Schritt5\controllerSpielfeld.js" />
+    <Content Include="Schritt5\controllerZelle.js" />
+    <Content Include="Schritt5\controllerZustand.js" />
+    <Content Include="Schritt5\highscore.js" />
+    <Content Include="Schritt5\index.css" />
+    <Content Include="Schritt5\index.html" />
+    <Content Include="Schritt5\index.js" />
+    <Content Include="Schritt5\spielfeld.js" />
+    <Content Include="Schritt5\zelle.js" />
     <Content Include="Schritt4\highscore.js" />
     <Content Include="Schritt4\controllerSpielfeld.js" />
     <Content Include="Schritt4\controllerZelle.js" />

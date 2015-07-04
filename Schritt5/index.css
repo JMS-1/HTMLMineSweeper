@@ -1,0 +1,69 @@
+﻿/* Das Spielfeld wird als Tabelle angezeigt. */
+.spielfeld {
+    display: table;
+    border-collapse: collapse;
+    background-color: greenyellow;
+}
+
+/* Jede Zeile des Spielfelds ist eine Tabellenzeile. */
+.spielfeldZeile {
+    display: table-row;
+}
+
+/* Die Zellen haben eine feste Größe und werden für alle Eventualitäten vorbereitet. */
+.spielfeldZelle {
+    display: table-cell;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+    /* Einmal aufgedeckt wird der Hintergrund der Zellen weiß. */
+    .spielfeldZelle.getested {
+        background-color: white;
+    }
+
+    /* Gesperrte Zellen erhalten einen roten Hintergrund. */
+    .spielfeldZelle.gesperrt {
+        background-color: red;
+    }
+
+/* Minen sind nur bei aufgedeckten Zellen sichtbar. */
+.mine.getested {
+    background-image: url(../mine.png);
+    background-position: center center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: red;
+}
+
+.optionen {
+    margin: 10px;
+}
+
+#highScore {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    opacity: 0.95;
+}
+
+#spieler {
+    border-collapse: collapse;
+}
+
+    #spieler > thead tr {
+        font-weight: bold;
+    }
+
+    #spieler td {
+        padding: 2px;
+        border: 1px solid black;
+    }
