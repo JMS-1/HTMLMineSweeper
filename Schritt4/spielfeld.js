@@ -16,7 +16,8 @@
         autoErweitern: boolean  gesetzt, wenn nach dem Prüfen von Zellen ohne Umfeld die Umfeldzellen auch geprüft werden sollen
 
   Änderungen zum Spielverlauf werden über Benachrichtigungen mitgeteilt:
-        fertig: (gewonnen: boolean) => void        wird aufgerufen, wenn das Spiel beendet ist - entweder, weil alle Zellen ohne Minen aufgedeckt sind oder versucht wurde, eine Zelle mit Mine aufzudecken
+        fertig: (gewonnen: boolean) => void     wird aufgerufen, wenn das Spiel beendet ist - entweder, weil alle Zellen ohne Minen aufgedeckt sind oder versucht wurde, eine Zelle mit Mine aufzudecken
+        gewonnen: () => void                    wird aufgerufen, nachdem das Spiel gewonnen wurde - immer nach fertig   
 */
 function Spielfeld(breite, hoehe, minen) {
     this.breite = breite;
@@ -31,6 +32,7 @@ Spielfeld.prototype.initialisieren = function () {
     this.zuPrüfen = this.breite * this.hoehe - this.minen;
     this.autoErweitern = false;
     this.ergebnis = undefined;
+    this.gewonnen = null;
     this.fertig = null;
     this.zellen = [];
 
@@ -120,5 +122,10 @@ Spielfeld.prototype.prüfen = function (zuPrüfen, zelle) {
 
     // Das Ende des Spiels mitteilen und dabei die Anzeige aktualisieren - das ist nicht Aufgabe des Modells!
     if (this.fertig !== null)
-        this.fertig(zuPrüfen == 0);
+        this.fertig(zuPrüfen === 0);
+
+    // Und wenn wir gewonnen haben, noch eine weitere Benachrichtigung
+    if (zuPrüfen === 0)
+        if (this.gewonnen !== null)
+            this.gewonnen();
 }

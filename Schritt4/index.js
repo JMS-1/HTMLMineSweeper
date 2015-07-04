@@ -32,6 +32,17 @@ function starten() {
     // Modell mit der Anzeige verbinden
     ControllerAutoErweiterung.connect(model, auto);
 
+    // Anzeige zur Ergebnisverwaltung
+    var score = document.getElementById('highScore');
+    var scoreArt = score.querySelector('#spielmodus');
+    var scoreSpieler = score.querySelector('#spieler > tbody');
+    var name = score.querySelector('#nameDesSpielers');
+    var ergebnis = score.querySelector('#ergebnisDesSpielers');
+    var eintrag = score.querySelector('#neuerHighScore');
+
+    // Modell mit Anzeige verbinden
+    ControllerHighScore.connect(new HighScore(model), score, scoreArt, scoreSpieler, name, ergebnis, eintrag);
+
     // Und ein erstes Feld ohne Mine und auch ohne Minen im direkten Umfeld als Starthilfe setzen
     model.freiesFeldSuchen();
 }

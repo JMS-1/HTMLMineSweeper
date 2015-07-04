@@ -29,7 +29,7 @@ var ControllerZustand = {
         // Startzustand setzen
         viewStatus.textContent = 'läuft';
 
-        // Auf das Sende des Spiels geeignet in der Anzeige reagieren
+        // Auf das Ende des Spiels geeignet in der Anzeige reagieren
         model.fertig = function (gewonnen) {
             viewStatus.textContent = (gewonnen ? "gewonnen" : "verloren");
         };

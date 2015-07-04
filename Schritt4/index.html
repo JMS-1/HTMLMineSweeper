@@ -8,9 +8,11 @@
     <script src="controllerSpielfeld.js"></script>
     <script src="controllerZustand.js"></script>
     <script src="controllerErweitern.js"></script>
+    <script src="controllerScore.js"></script>
 
     <script src="zelle.js"></script>
     <script src="spielfeld.js"></script>
+    <script src="highscore.js"></script>
 
     <script src="index.js"></script>
 </head>
@@ -43,6 +45,39 @@
             </tr>
         </tbody>
     </table>
+
+    <div id="highScore">
+        <div>
+            Ergebnisse für <span id="spielmodus"></span>:
+        </div>
+        <table id="spieler">
+            <thead>
+                <tr>
+                    <td>Spieler</td>
+                    <td>Zeit</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div>
+            Neuer HighScore:
+        </div>
+        <table>
+            <tr>
+                <td>Dein Name:</td>
+                <td><input type="text" id="nameDesSpielers" /></td>
+            </tr>
+            <tr>
+                <td>Dein Ergebnis:</td>
+                <td><span id="ergebnisDesSpielers"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" value="Eintragen" id="neuerHighScore" disabled />
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div id="mineSweeper">
     </div>

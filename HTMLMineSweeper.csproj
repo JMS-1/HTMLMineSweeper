@@ -67,9 +67,11 @@
   <ItemGroup>
     <Content Include="index.html" />
     <Content Include="mine.png" />
+    <Content Include="Schritt4\highscore.js" />
     <Content Include="Schritt4\controllerSpielfeld.js" />
     <Content Include="Schritt4\controllerZelle.js" />
     <Content Include="Schritt4\controllerErweitern.js" />
+    <Content Include="Schritt4\controllerScore.js" />
     <Content Include="Schritt4\controllerZustand.js" />
     <Content Include="Schritt4\index.css" />
     <Content Include="Schritt4\index.html" />
