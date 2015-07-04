@@ -31,7 +31,11 @@
             </tr>
             <tr>
                 <td>Leere Zellen erweitern:</td>
-                <td><input type="checkbox" id="autoErweitern" /></td>
+                <td><input type="checkbox" id="autoErweitern" autocomplete="off" /></td>
+            </tr>
+            <tr>
+                <td>Spiel:</td>
+                <td><span id="status"></span></td>
             </tr>
             <tr>
                 <td>Verstrichene Zeit (Sekunden):</td>
@@ -40,7 +44,7 @@
         </tbody>
     </table>
 
-    <div id="mineSweeper" class="mineSweeper">
+    <div id="mineSweeper">
     </div>
 
 </body>

@@ -1,13 +1,16 @@
-﻿.mineSweeper {
+﻿/* Das Spielfeld wird als Tabelle angezeigt. */
+.spielfeld {
     display: table;
     border-collapse: collapse;
+    background-color: greenyellow;
 }
 
-    .mineSweeper > div {
-        display: table-row;
-    }
+/* Jede Zeile des Spielfelds ist eine Tabellenzeile. */
+.spielfeldZeile {
+    display: table-row;
+}
 
-
+/* Die Zellen haben eine feste Größe und werden für alle Eventualitäten vorbereitet. */
 .spielfeldZelle {
     display: table-cell;
     width: 20px;
@@ -18,29 +21,24 @@
     font-weight: bold;
 }
 
-    .spielfeldZelle[data-mine] > div {
-        display: none;
+    /* Einmal aufgedeckt wird der Hintergrund der Zellen weiß. */
+    .spielfeldZelle.getested {
+        background-color: white;
     }
 
-    .spielfeldZelle[data-mine][data-getestet] {
-        background-image: url(../mine.png);
-        background-position: center center;
-        background-size: 100%;
-        background-repeat: no-repeat;
+    /* Gesperrte Zellen erhalten einen roten Hintergrund. */
+    .spielfeldZelle.gesperrt {
         background-color: red;
     }
 
-    .spielfeldZelle:not([data-getestet]) {
-        background-color: greenyellow;
-    }
-
-        .spielfeldZelle:not([data-getestet]) > div {
-            display: none;
-        }
-
-    .spielfeldZelle[data-gesperrt="ja"] {
-        background-color: red;
-    }
+/* Minen sind nur bei aufgedeckten Zellen sichtbar. */
+.mine.getested {
+    background-image: url(../mine.png);
+    background-position: center center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-color: red;
+}
 
 .optionen {
     margin: 10px;

@@ -21,9 +21,10 @@ function starten() {
 
     // Anzeige des Spielzustands
     var zeit = document.getElementById('zeit');
+    var status = document.getElementById('status');
 
     // Auch hier das Modell mit der Anzeige verbinden
-    ControllerZustand.connect(model, zeit);
+    ControllerZustand.connect(model, zeit, status);
 
     // Umschalter für das automatische Erweitern leerer Zellen
     var auto = document.getElementById('autoErweitern');

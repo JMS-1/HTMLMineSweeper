@@ -4,12 +4,9 @@ var ControllerZelle = {
     // Verbindet das Spielmodell einer Zelle mit der zugehörigen Anzeige.
     connect: function (model, view) {
 
-        // Anzahl der Minen in der unmittelbaren Umgebung der Zelle in die Anzeige übernehmen
-        view.innerHTML = '<div>' + ((model.minen > 0) ? model.minen : '') + '</div>';
-
-        // Anzeige für Zellen mit Minen vorbereiten
+        // Anzeige für die Minen vorbereiten
         if (model.istMine)
-            view.setAttribute('data-mine', 'ja');
+            view.className += ' mine';
 
         // Kontextmenü auf der Anzeige der Zelle deaktivieren
         view.oncontextmenu = function (ev) {
@@ -34,7 +31,10 @@ var ControllerZelle = {
 
             // Bei Veränderung des Spielzustands wird die Anzeige angemessen angepasst
             if (model.istGesperrt !== warGesperrt)
-                view.setAttribute('data-gesperrt', model.istGesperrt ? 'ja' : 'nein');
+                if (model.istGesperrt)
+                    view.className += ' gesperrt';
+                else
+                    view.className = view.className.substr(0, view.className.length - 9);
         };
 
         // Zelle auf Mine prüfen
@@ -44,7 +44,12 @@ var ControllerZelle = {
 
         // Geprüfte Zellen in der Anzeige markieren
         model.nachPrüfung = function () {
-            view.setAttribute('data-getestet', 'ja');
+            view.className += ' getested';
+
+            // Anzahl der Minen in der Umgebung einblenden
+            if (!model.istMine)
+                if (model.minen > 0)
+                    view.textContent = model.minen;
         };
     },
 };
