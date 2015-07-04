@@ -7,6 +7,7 @@
         breite: number          die Anzahl der Zellen pro Zeile des Spielfelds
         hoehe: number           die Anzahl der Zeilen des Spielfelds
         minen: number           die Anzahl der Zellen, unter denen Minen versteckt sind.
+        highScore: HighScore    die Verwaltung der Ergebnisse
 
   Weitere Informationen beschreiben den Zustand des Spiels:
         zellen: Zelle[]         alles Zellen, die zum Spiel gehören, angeordnet von rechts nach links und dann von oben nach unten
@@ -25,6 +26,8 @@ function Spielfeld(breite, hoehe, minen) {
     this.minen = minen;
 
     this.initialisieren();
+
+    this.highScore = new HighScore(this);
 }
 
 // Baut den Spielstand völlig neu auf.
@@ -41,13 +44,20 @@ Spielfeld.prototype.initialisieren = function () {
         for (var spalte = 0; spalte < this.breite; spalte++)
             this.zellen.push(new Zelle(this, zeile, spalte));
 
+    // Zellen ohne Minen
+    var ohneMinen = this.zellen.slice();
+
     // Die gewünschte Anzahl von Minen verstecken
-    for (var zuVerstecken = this.minen; zuVerstecken-- > 0;) {
-        var zelle = this.zufallsZelle();
-        if (zelle.istMine)
-            zuVerstecken++;
-        else
-            zelle.istMine = true;
+    while (ohneMinen.length > this.zuPrüfen) {
+        // Eine der Zellen aussuchen
+        var index = Math.floor(Math.random() * ohneMinen.length);
+        var zelle = ohneMinen[index];
+
+        // Aus dem Feld entfernen
+        ohneMinen.splice(index, 1);
+
+        // Eine Mine verstecken
+        zelle.istMine = true;
     }
 
     // Nun noch das Umfeld aller Zellen prüfen
@@ -63,20 +73,21 @@ Spielfeld.prototype.initialisieren = function () {
 
 // Sucht eine Zelle ohne Mine und ohne Minen im direkten Umfeld und führt die Prüfung darauf durch.
 Spielfeld.prototype.freiesFeldSuchen = function () {
-    for (; ;) {
-        var zelle = this.zufallsZelle();
-        if (zelle.minen > 0)
-            continue;
+    for (var alleZellen = this.zellen.slice() ; alleZellen.length > 0;) {
+        // Eine ermitteln
+        var index = Math.floor(Math.random() * alleZellen.length)
+        var zelle = alleZellen[index];
 
-        zelle.prüfen();
+        // Anzahl der Minen ermitteln
+        if (zelle.minen < 1) {
+            zelle.prüfen();
 
-        return;
+            return;
+        }
+
+        // Entfernen
+        alleZellen.splice(index, 1);
     }
-}
-
-// Ermittelt eine zufällige Zelle.
-Spielfeld.prototype.zufallsZelle = function () {
-    return this.zellen[Math.floor(Math.random() * this.zellen.length)];
 }
 
 // Beendet das Spiel als verloren.

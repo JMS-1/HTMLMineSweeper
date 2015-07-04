@@ -6,11 +6,16 @@ var ControllerZustand = {
 
     // Verbindet die Anzeige der Spielzeit mit dem Modell des Spielfelds.
     connect: function (model, viewZeit, viewStatus) {
+        var cssVorbei = 'abgelaufen';
+
         // Immer erst eine aktive Benachrichtigung entfernen
         window.clearTimeout(ControllerZustand.aktiv);
 
         // Wird periodisch aufgerufen, solange das Spiel läuft
         function zeitAktualisieren() {
+            if (viewZeit.className.indexOf(' ' + cssVorbei) >= 0)
+                viewZeit.className = viewZeit.className.substr(0, viewZeit.className.length - (1 + cssVorbei.length));
+
             // Nachsehen, ob das Spiel vielleicht schon vorbei ist
             var ergebnis = model.ergebnis;
             if (ergebnis !== undefined) {
@@ -18,8 +23,14 @@ var ControllerZustand = {
                 viewZeit.textContent = ergebnis;
             }
             else {
+                var ergebnis = model.spielzeit();
+
                 // Aktuelle Spielzeit nur auf ganze Sekunden anzeigen
-                viewZeit.textContent = Math.round(model.spielzeit());
+                viewZeit.textContent = Math.round(ergebnis);
+
+                // Das gibt keine neue Bestzeit mehr
+                if (!model.highScore.istHighScore(ergebnis))
+                    viewZeit.className += ' ' + cssVorbei;
 
                 // Und später nocheinmal hier vorbeischauen
                 ControllerZustand.aktiv = window.setTimeout(zeitAktualisieren, 100);

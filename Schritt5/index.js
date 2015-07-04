@@ -41,7 +41,7 @@ function starten() {
     var eintrag = score.querySelector('#neuerHighScore');
 
     // Modell mit Anzeige verbinden
-    ControllerHighScore.connect(new HighScore(model), score, scoreArt, scoreSpieler, name, ergebnis, eintrag);
+    ControllerHighScore.connect(model, score, scoreArt, scoreSpieler, name, ergebnis, eintrag);
 
     // Und ein erstes Feld ohne Mine und auch ohne Minen im direkten Umfeld als Starthilfe setzen
     model.freiesFeldSuchen();

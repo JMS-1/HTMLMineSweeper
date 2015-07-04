@@ -25,8 +25,9 @@
                 <td>Größe des Spielfelds:</td>
                 <td>
                     <select id="auswahlGröße">
-                        <option value="10x10x10" selected>10 Zeilen, 10 Spalten, 10 Minen</option>
-                        <option value="20x40x100">20 Zeilen, 40 Spalten, 100 Minen</option>
+                        <option value="9x9x10" selected>9 Zeilen, 9 Spalten, 10 Minen</option>
+                        <option value="16x16x40">16 Zeilen, 16 Spalten, 40 Minen</option>
+                        <option value="16x30x99">16 Zeilen, 30 Spalten, 99 Minen</option>
                     </select>
                     <input type="button" value="Neu aufbauen" onclick="starten()" />
                 </td>
@@ -48,35 +49,30 @@
 
     <div id="highScore">
         <div>
-            Ergebnisse für <span id="spielmodus"></span>:
+            <h3>Die besten Ergebnisse für <span id="spielmodus"></span></h3>
+            <table id="spieler">
+                <thead>
+                    <tr>
+                        <td>Spieler</td>
+                        <td>Zeit</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="highScoreEingabe">
+                <h4>Neuer HighScore</h4>
+                <table>
+                    <tr>
+                        <td>Dein Ergebnis:</td>
+                        <td><span id="ergebnisDesSpielers"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Dein Name:</td>
+                        <td><input type="text" id="nameDesSpielers" size="30" /> <input type="button" value="Eintragen" id="neuerHighScore" disabled /></td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <table id="spieler">
-            <thead>
-                <tr>
-                    <td>Spieler</td>
-                    <td>Zeit</td>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div>
-            Neuer HighScore:
-        </div>
-        <table>
-            <tr>
-                <td>Dein Name:</td>
-                <td><input type="text" id="nameDesSpielers" /></td>
-            </tr>
-            <tr>
-                <td>Dein Ergebnis:</td>
-                <td><span id="ergebnisDesSpielers"></span></td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <input type="button" value="Eintragen" id="neuerHighScore" disabled />
-                </td>
-            </tr>
-        </table>
     </div>
 
     <div id="mineSweeper">

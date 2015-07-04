@@ -2,10 +2,8 @@
 
 var ControllerHighScore = {
     connect: function (model, viewAlles, viewArt, viewSpieler, viewName, viewErgebnis, viewEintragen) {
-        var spielfeld = model.spielfeld;
-
         // Anzeige der Art
-        viewArt.textContent = spielfeld.hoehe + ' Zeilen, ' + spielfeld.breite + ' Spalten,' + spielfeld.minen + ' Minen';
+        viewArt.textContent = model.hoehe + ' Zeilen, ' + model.breite + ' Spalten, ' + model.minen + ' Minen';
 
         viewName.onkeyup = function () {
             if (this.value == '')
@@ -15,28 +13,37 @@ var ControllerHighScore = {
         }
 
         viewEintragen.onclick = function () {
-            model.eintragen(viewName.value, spielfeld.ergebnis);
+            model.highScore.eintragen(viewName.value, model.ergebnis);
 
             viewAlles.style.display = 'none';
         }
 
-        // Sobald wir gewonnen haben entsprechend reagieren
-        spielfeld.gewonnen = function () {
-            var ergebnis = spielfeld.ergebnis;
-            if (!model.istHighScore(ergebnis))
-                return;
-
+        // Erstellt die Liste der Ergebnisse.
+        function aktualisieren() {
             var html = '';
 
-            model.spieler.forEach(function (spieler) {
+            model.highScore.spieler.forEach(function (spieler) {
                 html += '<tr><td>' + spieler.name + '</td><td>' + spieler.zeit + 's</td></tr>';
             });
 
             viewSpieler.innerHTML = html;
+        }
+
+        // Sobald wir gewonnen haben entsprechend reagieren
+        model.gewonnen = function () {
+            var ergebnis = model.ergebnis;
+            if (!model.highScore.istHighScore(ergebnis))
+                return;
+
             viewErgebnis.textContent = ergebnis + 's';
+
+            aktualisieren();
 
             viewAlles.style.display = '';
         };
+
+        // Erstmalig aufbereiten
+        aktualisieren();
 
         // Verstecken
         viewAlles.style.display = 'none';
