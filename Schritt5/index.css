@@ -44,7 +44,7 @@
     background-color: red;
 }
 
-.abgelaufen{
+.abgelaufen {
     color: red;
 }
 
@@ -92,6 +92,34 @@
     padding: 4px;
 }
 
-#highScoreEingabe > h4{
-    margin-top: 0px;
+    #highScoreEingabe > h4 {
+        margin-top: 0px;
+    }
+
+.schaltfläche {
+    border: 1px solid ButtonShadow;
+    text-align: center;
+    padding: 1px 4px;
+    background-color: ButtonFace;
+}
+
+    .schaltfläche:hover {
+        background-color: ButtonHighlight;
+    }
+
+#autoErweitern + label {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    width: 3em;
+    display: inline-block;
+}
+
+#autoErweitern:checked + label > span:last-child {
+    display: none;
+}
+
+#autoErweitern:not(:checked) + label > span:first-child {
+    display: none;
 }
