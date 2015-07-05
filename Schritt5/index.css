@@ -3,6 +3,10 @@
     display: table;
     border-collapse: collapse;
     background-color: greenyellow;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 /* Jede Zeile des Spielfelds ist eine Tabellenzeile. */
