@@ -25,16 +25,16 @@
                 <td>Größe des Spielfelds:</td>
                 <td>
                     <select id="auswahlGröße">
-                        <option value="9x9x10" selected>9 Zeilen, 9 Spalten, 10 Minen</option>
-                        <option value="16x16x40">16 Zeilen, 16 Spalten, 40 Minen</option>
-                        <option value="16x30x99">16 Zeilen, 30 Spalten, 99 Minen</option>
+                        <option value="9x9x10" selected>Einfach</option>
+                        <option value="16x16x40">Normal</option>
+                        <option value="16x30x99">Schwer</option>
                     </select>
                     <input type="button" value="Neu aufbauen" onclick="starten()" />
                 </td>
             </tr>
             <tr>
                 <td>Leere Zellen erweitern:</td>
-                <td><input type="checkbox" id="autoErweitern" autocomplete="off" /></td>
+                <td><input type="checkbox" id="autoErweitern" autocomplete="off" checked /></td>
             </tr>
             <tr>
                 <td>Spiel:</td>
