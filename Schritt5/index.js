@@ -33,7 +33,7 @@ function starten() {
     ControllerAutoErweiterung.connect(model, auto);
 
     // Anzeige zur Ergebnisverwaltung
-    var score = document.getElementById('highScore');
+    var score = document.getElementById('highScoreDialog');
     var scoreArt = score.querySelector('#spielmodus');
     var scoreSpieler = score.querySelector('#spieler > tbody');
     var name = score.querySelector('#nameDesSpielers');
